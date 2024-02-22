@@ -1,9 +1,9 @@
-import os
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import generativeai as genai
+import os
 
-# Load environment variables
 load_dotenv()
+
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 class GeminiChat:
     def __init__(self):
@@ -28,10 +28,10 @@ class GeminiChat:
             return None
 
 # Example usage
-if __name__ == "__main__":
-    gemini_chat = GeminiChat()
-    response = gemini_chat.send_message("Hello, Gemini! How are you today?", temp=0.7, top_p=0.9)
-    if response:
-        print("Gemini's response:", response)
-    else:
-        print("Failed to get response from Gemini.")
+# if __name__ == "__main__":
+#     gemini_chat = GeminiChat()
+#     response = gemini_chat.send_message("Hello, Gemini! How are you today?", temp=0.7, top_p=0.9)
+#     if response:
+#         print("Gemini's response:", response)
+#     else:
+#         print("Failed to get response from Gemini.")
