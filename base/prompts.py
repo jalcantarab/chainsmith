@@ -1,49 +1,52 @@
-# prompts.py
-
 # Role Identification Agent Prompt
+# This prompt aims to break down the user's idea into a simple JSON list of tasks.
+# In prompts.py, adjust the ROLE_IDENTIFICATION_PROMPT like so:
+
 ROLE_IDENTIFICATION_PROMPT = """
-Based on the following idea: '{user_idea}', break down the concept into specific, actionable tasks. For each task, identify the type of agent that would be best suited to complete it, considering the task's requirements and objectives. Detail the tasks in a structured format, including a brief description, the inputs needed, and the expected outputs.
+Based on the following idea: '{user_idea}', identify the primary tasks needed to realize this idea. 
+List each task with a brief description and any key details necessary for understanding the task's scope and requirements. 
+The output should be formatted as a JSON list of objects, where each object represents a distinct task necessary to complete the system. 
+Each task object should include a 'task' key with a short description as its value, and a 'description' key with a longer, detailed description as its value.
 
-To facilitate a clear understanding of the expected output format and task interdependencies, here is an example based on simple arithmetic operations:
+Please ensure the output adheres to proper JSON syntax, including the use of double quotes for strings, and commas to separate items in the list and keys in the objects.
 
+Example Output Format:
 [
     {{
-      "task_id": "task_1",
-      "prompt": "Calculate the sum of two numbers",
-      "input": [
-        {{
-          "variable_name": "number1",
-          "source": "human"
-        }},
-        {{
-          "variable_name": "number2",
-          "source": "human"
-        }}
-      ],
-      "output": [
-        {{
-          "variable_name": "sum",
-          "destination": "task_2"
-        }}
-      ]
+        "task": "Define System Requirements",
+        "description": "Identify the specific objectives, constraints, and functionalities required for the system."
     }},
-    ...
+    {{
+        "task": "Gather Data",
+        "description": "Collect relevant financial documents, reports, and records from various sources."
+    }}
+    // Additional tasks as needed
 ]
 """.strip()
 
 
-# Agent Configuration Prompt
+
+# Detailed Task Configuration Prompt
+# This prompt is designed to elaborate on each task, incorporating specific variables (inputs and outputs) for the system prompts.
 AGENT_CONFIGURATION_PROMPT = """
-Given the list of tasks identified from the user idea, each described with a specific task description, recommended agent type, required input variables, and expected output variables, generate detailed system prompts for each task. These prompts should guide the agents in completing their designated tasks efficiently and effectively, incorporating the context of the task, the necessary inputs, and the desired outcomes.
+Given the task: '{task}', with the following description: '{description}', create a detailed system prompt that outlines how to achieve this task. Include necessary input variables and expected output variables, ensuring that each is clearly defined. The output should be formatted as a JSON object that includes the original task and description, the detailed system prompt, and lists of input and output variables.
 
-For each task, create a prompt that includes:
-- A clear description of the task to be completed, integrating the task description provided.
-- Instructions tailored to the agent's capabilities and the nature of the task, ensuring the agent understands the operational context and objectives.
-- Details on the input variables, including their sources and formats, to clarify what information the agent will work with.
-- Specifications for the output variables, detailing the expected format and structure of the task's output to ensure compatibility with subsequent tasks or system components.
+Example Output Format:
+{{
+    "task": "{task}",
+    "description": "{description}",
+    "system_prompt": "Detailed instructions on how to achieve the task.",
+    "input_variables": [
+        {{"variable_name": "input1", "source": "Source Description"}},
+        ...
+    ],
+    "output_variables": [
+        {{"variable_name": "output1", "destination": "Destination Description"}},
+        ...
+    ]
+}}
+""".strip()
 
-Output Format: A JSON list where each entry corresponds to a task and contains the newly generated agent prompt, along with the original task description, input variables, and output variables. This structured format will facilitate the dynamic configuration of agents and the seamless integration of their outputs in the multi-agent system workflow.
-"""
 
 # Script Planning Prompt
 SCRIPT_PLANNING_PROMPT = """
@@ -60,7 +63,7 @@ Output Format: A structured system architecture/technical specification document
 
 # System Assembly Prompt
 SYSTEM_ASSEMBLY_PROMPT = """
-With the script plan and the detailed list of tasks, including agent prompts, input variables, and output variables, develop a production-ready Python script to operationalize the multi-agent AI system. Ensure the script dynamically imports the most recent agent prompts file and utilizes its contents to configure each agent and execute the tasks according to the plan.
+With the script plan and the detailed list of tasks, including agent prompts, input variables, and output variables, develop a production-ready Streamlit App Python script to operationalize the multi-agent AI system. Ensure the script dynamically imports the most recent agent prompts file and utilizes its contents to configure each agent and execute the tasks according to the plan.
 
 Output Format: A complete, fully functional, and production-ready Python script ready for deployment. The script should include logic for dynamic task execution based on the plan, handle data exchange between tasks, manage error conditions gracefully, and produce the final output in the specified format. Ensure all aspects of the system are covered, with no placeholders, and that the script is structured for easy maintenance and scalability.
 """
