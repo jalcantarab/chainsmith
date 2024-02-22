@@ -3,8 +3,8 @@
 # In prompts.py, adjust the ROLE_IDENTIFICATION_PROMPT like so:
 
 ROLE_IDENTIFICATION_PROMPT = """
-Based on the following idea: '{user_idea}', identify the primary tasks needed to realize this idea. 
-List each task with a brief description and any key details necessary for understanding the task's scope and requirements. 
+Based on the following idea: '{user_idea}', identify the primary tasks needed to realize this idea, up to 5 tasks maximum. 
+List each task with a brief description and any key details necessary for understanding the task's scope and requirements, ensuring each task is simple and actionable. 
 The output should be formatted as a JSON list of objects, where each object represents a distinct task necessary to complete the system. 
 Each task object should include a 'task' key with a short description as its value, and a 'description' key with a longer, detailed description as its value.
 
@@ -38,11 +38,11 @@ Example Output Format:
     "system_prompt": "Detailed instructions on how to achieve the task.",
     "input_variables": [
         {{"variable_name": "input1", "source": "Source Description"}},
-        ...
+        
     ],
     "output_variables": [
         {{"variable_name": "output1", "destination": "Destination Description"}},
-        ...
+        
     ]
 }}
 """.strip()

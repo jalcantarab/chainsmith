@@ -15,7 +15,7 @@ class GeminiChat:
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel('gemini-pro')
 
-    def send_message(self, prompt, temp=0.85, top_p=1.0):
+    def send_message(self, prompt, temp=0.042, top_p=1.0):
         """
         Send a message to the Gemini model with specified temperature and top probability.
         """

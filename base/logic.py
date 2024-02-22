@@ -12,7 +12,7 @@ class MultiAgentSystemGenerator:
         print(f"Sending prompt to GeminiChat: {prompt}...")
         response = self.gemini_chat.send_message(prompt=prompt)
         print("Received response from GeminiChat.")
-        print(f"Response (first 100 chars): {response}")
+        print(f"Response: {response}")
         
         cleaned_response = self.clean_json_response(response)
         print(f"Cleaned JSON response: {cleaned_response}")
