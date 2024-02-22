@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Task Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #dynamicTaskForm {
+            display: none; /* Initially hide the form */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">Define Your Use-Case</div>
+            <div class="card-body">
+                <input type="text" id="useCaseInput" class="form-control" placeholder="Enter your use-case here">
+                <button id="submitUseCaseBtn" class="btn btn-primary mt-3">Submit</button>
+            </div>
+        </div>
+
+        <div id="dynamicTaskForm" class="card mt-3">
+            <div class="card-header bg-secondary text-white">Task Inputs Required</div>
+            <div class="card-body" id="taskInputsContainer">
+                <!-- Dynamic inputs will be added here -->
+            </div>
+            <div class="card-footer">
+                <button id="submitTasksBtn" class="btn btn-secondary">Submit Tasks</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjyDvLZiOQ5Nz/5gBdP6tYi6t7e3oBxT6i5rbTKEQzVpc3T4OCJ46N" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById('submitUseCaseBtn').addEventListener('click', function() {
+            const useCaseInput = document.getElementById('useCaseInput');
+            const useCase = useCaseInput.value.trim();
+            if (useCase === '') return; // Don't submit empty use-case
+
+            // Placeholder for AJAX call to submit the use-case to the backend
+            console.log("Submitting use-case to backend:", useCase);
+
+            // Simulate a loading state or a progress bar here if desired
+
+            // Example of polling for updates (simulated with setTimeout)
+            setTimeout(function() {
+                // Simulate receiving tasks data from the backend
+                const tasksData = {
+                    tasks: [
+                        {task_id: "task_1", prompt: "Enter number", input: [{variable_name: "number1", source: "human"}]},
+                        {task_id: "task_2", prompt: "Enter factor", input: [{variable_name: "factor", source: "human"}]}
+                    ]
+                };
+                displayTaskForm(tasksData);
+            }, 3000); // Simulate 3 seconds delay for backend processing
+        });
+
+        function displayTaskForm(tasksData) {
+            const container = document.getElementById('taskInputsContainer');
+            container.innerHTML = ''; // Clear previous inputs if any
+
+            tasksData.tasks.forEach(task => {
+                task.input.forEach(input => {
+                    if (input.source === "human") {
+                        const inputGroup = document.createElement('div');
+                        inputGroup.className = 'input-group mb-3';
+
+                        const inputLabel = document.createElement('span');
+                        inputLabel.className = 'input-group-text';
+                        inputLabel.innerText = task.prompt || 'Input';
+                        inputGroup.appendChild(inputLabel);
+
+                        const inputElement = document.createElement('input');
+                        inputElement.type = 'text';
+                        inputElement.className = 'form-control';
+                        inputElement.placeholder = input.variable_name;
+                        inputElement.setAttribute('data-task-id', task.task_id); // For identifying task on submission
+                        inputGroup.appendChild(inputElement);
+
+                        container.appendChild(inputGroup);
+                    }
+                });
+            });
+
+            // Show the form
+            document.getElementById('dynamicTaskForm').style.display = 'block';
+        }
+
+        document.getElementById('submitTasksBtn').addEventListener('click', function() {
+            const inputs = document.querySelectorAll('#taskInputsContainer input');
+            const tasks = Array.from(inputs).map(input => ({
+                task_id: input.getAttribute('data-task-id'),
+                value: input.value
+            }));
+
+            console.log("Submitting tasks to backend:", tasks);
+
+            // Here, you would make another AJAX call to submit the task inputs to the backend
+        });
+    </script>
+</body>
+</html>
