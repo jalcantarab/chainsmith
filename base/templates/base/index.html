@@ -47,63 +47,22 @@
 
             // Placeholder for AJAX call to submit the use-case to the backend
             console.log("Submitting use-case to backend:", useCase);
-
-            // Simulate a loading state or a progress bar here if desired
-
-            // Example of polling for updates (simulated with setTimeout)
-            setTimeout(function() {
-                // Simulate receiving tasks data from the backend
-                const tasksData = {
-                    tasks: [
-                        {task_id: "task_1", prompt: "Enter number", input: [{variable_name: "number1", source: "human"}]},
-                        {task_id: "task_2", prompt: "Enter factor", input: [{variable_name: "factor", source: "human"}]}
-                    ]
-                };
-                displayTaskForm(tasksData);
-            }, 3000); // Simulate 3 seconds delay for backend processing
-        });
-
-        function displayTaskForm(tasksData) {
-            const container = document.getElementById('taskInputsContainer');
-            container.innerHTML = ''; // Clear previous inputs if any
-
-            tasksData.tasks.forEach(task => {
-                task.input.forEach(input => {
-                    if (input.source === "human") {
-                        const inputGroup = document.createElement('div');
-                        inputGroup.className = 'input-group mb-3';
-
-                        const inputLabel = document.createElement('span');
-                        inputLabel.className = 'input-group-text';
-                        inputLabel.innerText = task.prompt || 'Input';
-                        inputGroup.appendChild(inputLabel);
-
-                        const inputElement = document.createElement('input');
-                        inputElement.type = 'text';
-                        inputElement.className = 'form-control';
-                        inputElement.placeholder = input.variable_name;
-                        inputElement.setAttribute('data-task-id', task.task_id); // For identifying task on submission
-                        inputGroup.appendChild(inputElement);
-
-                        container.appendChild(inputGroup);
-                    }
-                });
+            // Fetch data from server
+            fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `query=${useCase}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
             });
 
-            // Show the form
-            document.getElementById('dynamicTaskForm').style.display = 'block';
-        }
-
-        document.getElementById('submitTasksBtn').addEventListener('click', function() {
-            const inputs = document.querySelectorAll('#taskInputsContainer input');
-            const tasks = Array.from(inputs).map(input => ({
-                task_id: input.getAttribute('data-task-id'),
-                value: input.value
-            }));
-
-            console.log("Submitting tasks to backend:", tasks);
-
-            // Here, you would make another AJAX call to submit the task inputs to the backend
+            // Clear the input field
+            useCaseInput.value = '';
         });
     </script>
 </body>
