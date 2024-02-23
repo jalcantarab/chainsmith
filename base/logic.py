@@ -1,17 +1,17 @@
-from .gemini_chat import GeminiChat
-from . import prompts
+# Assuming generate_ai_text is in openai_chat.py
+from openai_chat import generate_ai_text
+import prompts
 import json
 import re
 
 class MultiAgentSystemGenerator:
     def __init__(self):
-        self.gemini_chat = GeminiChat()
-        print("GeminiChat initialized.")
+        print("System initialized with OpenAI.")
 
-    def generate_completion(self, prompt):
-        print(f"Sending prompt to GeminiChat: {prompt}...")
-        response = self.gemini_chat.send_message(prompt=prompt)
-        print("Received response from GeminiChat.")
+    def generate_completion(self, prompt, temperature=0.111):
+        print(f"Sending prompt to OpenAI: {prompt}")
+        response = generate_ai_text(prompt, temperature)
+        print("Received response from OpenAI.")
         print(f"Response: {response}")
         
         cleaned_response = self.clean_json_response(response)
@@ -45,7 +45,6 @@ class MultiAgentSystemGenerator:
 
         for index, task in enumerate(tasks, start=1):
             print(f"Configuring agent for task {index}...")
-            # Correctly format the prompt with the actual keys in the task dictionary
             agent_configuration_prompt = prompts.AGENT_CONFIGURATION_PROMPT.format(
                 task=task["task"],
                 description=task["description"]
@@ -54,17 +53,7 @@ class MultiAgentSystemGenerator:
             print(f"Task {index} configuration: {task['agent_prompt']}")
         
         print("Generating script plan...")
-        return tasks
-        # script_planning_prompt = prompts.SCRIPT_PLANNING_PROMPT.format(agent_prompts=json.dumps(tasks), user_idea=user_idea)
-        # script_plan = self.generate_completion(script_planning_prompt)
-        # print("Script plan generated.")
-
-        # print("Generating system assembly script...")
-        # system_assembly_prompt = prompts.SYSTEM_ASSEMBLY_PROMPT.format(script_plan=script_plan, agent_prompts=json.dumps(tasks))
-        # system_script = self.generate_completion(system_assembly_prompt)
-        # print("System assembly script generated.")
-
-        # return system_script
+        return tasks  # This is where you stopped; adjust as needed for full functionality.
 
 def main():
     user_idea = "Develop a system to analyze financial documents."
@@ -75,7 +64,7 @@ def main():
 
     if system_script:
         print("Generated System Script successfully:")
-        print(system_script)  # Adjusted for readability
+        print(system_script)
     else:
         print("Failed to generate system script due to errors.")
 
