@@ -1,6 +1,6 @@
 # Assuming generate_ai_text is in openai_chat.py
-from openai_chat import generate_ai_text
-import prompts
+from .openai_chat import generate_ai_text
+from .prompts import ROLE_IDENTIFICATION_PROMPT, AGENT_CONFIGURATION_PROMPT
 import json
 import re
 
@@ -30,7 +30,7 @@ class MultiAgentSystemGenerator:
     def process_user_idea(self, user_idea):
         print(f"Processing user idea: {user_idea}")
         
-        role_identification_prompt = prompts.ROLE_IDENTIFICATION_PROMPT.format(user_idea=user_idea)
+        role_identification_prompt = ROLE_IDENTIFICATION_PROMPT.format(user_idea=user_idea)
         print("Generating tasks for role identification...")
         tasks_json = self.generate_completion(role_identification_prompt)
         
@@ -45,7 +45,7 @@ class MultiAgentSystemGenerator:
 
         for index, task in enumerate(tasks, start=1):
             print(f"Configuring agent for task {index}...")
-            agent_configuration_prompt = prompts.AGENT_CONFIGURATION_PROMPT.format(
+            agent_configuration_prompt = AGENT_CONFIGURATION_PROMPT.format(
                 task=task["task"],
                 description=task["description"]
             )

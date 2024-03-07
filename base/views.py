@@ -11,7 +11,7 @@ def index(request):
         print(f"Starting system generation for user idea: {query}")
         
         system_generator = MultiAgentSystemGenerator()
-        system_script = system_generator.process_user_idea(query)
+        result = system_generator.process_user_idea(query)
 
         # Return the chatbot's response as JSON.
         return JsonResponse(result)
